@@ -45,6 +45,16 @@
 			path = SecureVaultUITests;
 			sourceTree = "<group>";
 		};
+		3E18D60A307DCA94009BC34F /* Views */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Views;
+			sourceTree = "<group>";
+		};
+		3E18D60D307F6396009BC34F /* Components */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Components;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +85,8 @@
 		3E18D5D5307DBD67009BC34F = {
 			isa = PBXGroup;
 			children = (
+				3E18D60D307F6396009BC34F /* Components */,
+				3E18D60A307DCA94009BC34F /* Views */,
 				3E18D5E0307DBD67009BC34F /* SecureVault */,
 				3E18D5EE307DBD69009BC34F /* SecureVaultTests */,
 				3E18D5F8307DBD69009BC34F /* SecureVaultUITests */,
@@ -109,6 +121,8 @@
 			);
 			fileSystemSynchronizedGroups = (
 				3E18D5E0307DBD67009BC34F /* SecureVault */,
+				3E18D60A307DCA94009BC34F /* Views */,
+				3E18D60D307F6396009BC34F /* Components */,
 			);
 			name = SecureVault;
 			packageProductDependencies = (
