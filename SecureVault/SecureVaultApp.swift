@@ -27,7 +27,7 @@ struct SecureVaultApp: App {
     }
     
     struct RootView: View {
-        @Bindable var viewModel: AuthViewModel
+        let viewModel: AuthViewModel
 
         var body: some View {
             switch viewModel.state {

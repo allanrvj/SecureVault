@@ -76,6 +76,11 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		3E18D62D3083815D009BC34F /* Preview */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Preview;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +114,7 @@
 		3E18D5D5307DBD67009BC34F = {
 			isa = PBXGroup;
 			children = (
+				3E18D62D3083815D009BC34F /* Preview */,
 				3E18D6243082FC65009BC34F /* Services */,
 				3E18D61E30808548009BC34F /* Extensions */,
 				3E18D61730806882009BC34F /* ViewModel */,
@@ -161,6 +167,7 @@
 				3E18D61730806882009BC34F /* ViewModel */,
 				3E18D61E30808548009BC34F /* Extensions */,
 				3E18D6243082FC65009BC34F /* Services */,
+				3E18D62D3083815D009BC34F /* Preview */,
 			);
 			name = SecureVault;
 			packageProductDependencies = (
@@ -463,6 +470,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -495,6 +503,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

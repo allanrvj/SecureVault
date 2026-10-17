@@ -61,5 +61,5 @@ struct SignupLoginScreen: View {
 }
 
 #Preview {
-//    SignupLoginScreen()
+    SignupLoginScreen(viewModel: .preview)
 }

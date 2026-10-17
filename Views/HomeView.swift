@@ -23,11 +23,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView(viewModel: AuthViewModel(service: PreviewAuthService()))
-}
-
-private struct PreviewAuthService: AuthService {
-    func signIn(email: String, password: String) async throws {}
-    func signOut() async throws {}
-    func hasValidSession() async -> Bool { true }
+    HomeView(viewModel: .preview)
 }
