@@ -9,12 +9,18 @@ import SwiftUI
 
 struct SignupLoginScreen: View {
     
-    @State var username = ""
-    @State var password = ""
+    @State private var email = ""
+    @State private var password = ""
+    
+    private let viewModel: AuthViewModel
+    
+    init(viewModel: AuthViewModel) {
+        self.viewModel = viewModel
+    }
     
     var body: some View {
         ZStack {
-            Color.white.ignoresSafeArea()
+            Color(.systemBackground)
             VStack {
                 Text("SecureVault").font(.title2).foregroundStyle(Color.accentColor).padding().bold()
                 
@@ -23,7 +29,7 @@ struct SignupLoginScreen: View {
                 Text("Welcome back").font(.title).padding(50)
 
                 BorderedField {
-                    TextField("Username", text: $username)
+                    TextField("Email", text: $email)
                 }
                 
                 BorderedField {
@@ -31,20 +37,29 @@ struct SignupLoginScreen: View {
                 }
 
                 
-                Button(action: {}) {
+                Button(action: {
+                    Task {
+                        await viewModel.signIn(email: email, password: password)
+                    }
+                }) {
                     Text("Login to system")
                 }.buttonStyle(.borderedProminent)
                     .controlSize(.large)
                     .shadow(radius: 3)
                     .padding()
+                    .disabled(!canSubmit)
                 
                 Spacer()
             }
  
         }
     }
+    
+    private var canSubmit: Bool {
+        email.isValidEmail && !password.isEmpty
+    }
 }
 
 #Preview {
-    SignupLoginScreen()
+//    SignupLoginScreen()
 }
