@@ -5,13 +5,10 @@ A SwiftUI iOS app that demonstrates a secure authentication flow: email/password
 I built it as a portfolio project to show how I structure a small, testable iOS app with modern Apple frameworks, and to document the security trade-offs I made along the way.
 
 > **Status:** work in progress. See [Project status](#project-status) for what is done and what is planned.
-<!-- <p align="left">
-     <img src="Screenshots/IMG_2146.PNG" width="180" alt="Login Screen"> <img src="Screenshots/IMG_2145.PNG" width="180" alt="Home Screen"> <img src="Screenshots/IMG_2144.PNG" width="180" alt="Settings Screen"> <img src="Screenshots/IMG_2147.PNG" width="180" alt="Locked Screen">
-</p> -->
 
 | Login | Home | Settings | Locked Mode |
 |:---:|:---:|:---:|:---:|
-| <img src="Screenshots/IMG_2146.PNG" width="180"> | <img src="Screenshots/IMG_2145.PNG" width="180"> | <img src="Screenshots/IMG_2144.PNG" width="180"> | <img src="Screenshots/IMG_2147.PNG" width="180"> |
+| <img src="Screenshots/IMG_2146.PNG" width="180" alt="Login screen"> | <img src="Screenshots/IMG_2145.PNG" width="180" alt="Home screen"> | <img src="Screenshots/IMG_2144.PNG" width="180" alt="Settings screen"> | <img src="Screenshots/IMG_2147.PNG" width="180" alt="Locked mode"> |
 
 ## What it does
 
@@ -45,7 +42,7 @@ View  →  AuthViewModel  →  protocol (AuthService / DeviceAuthenticator / Key
 
 ```
 SecureVault/
-├── SecureVault/        App entry point (SecureVaultApp) and assets
+├── SecureVault/                App entry point (SecureVaultApp), AppConfig, Info.plist and assets
 ├── Services/           Protocols and their real implementations
 │   ├── AuthService               protocol
 │   ├── SupabaseAuthService       wraps SupabaseClient
@@ -57,7 +54,9 @@ SecureVault/
 ├── Views/              SignupLoginView, HomeView, SettingsView, LockedView
 ├── Components/         Reusable UI (BorderedField)
 ├── Extensions/         String+Validation
-└── Preview/            Fakes used by SwiftUI previews (DEBUG only)
+├─- Preview/            Fakes used by SwiftUI previews (DEBUG only)
+├── Screenshots/                Images used in this README
+└── Secrets.example.xcconfig    Template for your own Secrets.xcconfig (not committed)
 ```
 
 ### App state
@@ -66,11 +65,13 @@ SecureVault/
 
 ### Dependency injection
 
-The view model receives its dependencies through its initializer. In the app these are the real implementations; in previews and unit tests they are in-memory fakes (for example, a fake Keychain backed by a dictionary and a fake authenticator that returns a canned result). No view or view model imports `LocalAuthentication` directly, which is what makes the lock logic testable without a device.
+The view model receives its dependencies through its initializer. In the app these are the real implementations; in previews they are in-memory fakes, and the planned unit tests will use the same approach. No view or view model imports `LocalAuthentication` directly, which is what makes the lock logic testable without a device.
 
 ## Design decisions
 
 These are the decisions I'd want a reviewer to know about, and why I made them.
+
+**Supabase is used for Auth only.** There are no database tables, so there is no row-level data to protect. Email confirmation is enabled and anonymous sign-ins are disabled. Only the publishable (anon) key is used in the app.
 
 **The session is not stored twice.** The Supabase SDK already persists its session in the Keychain, so the app doesn't keep its own copy.
 
@@ -114,12 +115,17 @@ Requirements: Xcode (version: 26.3), iOS (deployment target: 18.6).
 
 1. Clone the repository and open `SecureVault.xcodeproj`.
 2. Swift Package Manager resolves the Supabase dependency automatically.
-3. Create your own Supabase project and set its URL and publishable (anon) key where the `SupabaseClient` is created in `SecureVaultApp.swift`. Don't use a service-role key in a client app.
-4. Add `NSFaceIDUsageDescription` ("Privacy - Face ID Usage Description") to the target's Info settings if it isn't set already.
-5. Run on a simulator. For Face ID, enable it under **Features > Face ID > Enrolled** and use **Matching Face** / **Non-matching Face** to simulate a scan. Test at least once on a real device.
+3. Copy `Secrets.example.xcconfig` to `Secrets.xcconfig` and fill in your own Supabase project URL and publishable (anon) key. `Secrets.xcconfig` is git-ignored, so your keys are never committed. Don't use a service-role key in a client app.
+4. In the Supabase dashboard, create a test user under **Authentication → Users**. The app has no sign-up flow yet, so you need an existing account to log in.
+5. `NSFaceIDUsageDescription` ("Privacy - Face ID Usage Description") is already set in `Info.plist`.
+6. Run on a simulator. For Face ID, enable it under **Features > Face ID > Enrolled** and use **Matching Face** / **Non-matching Face** to simulate a scan. Test at least once on a real device.
 
 Useful during development: `xcrun simctl keychain booted reset` clears the Keychain on the booted simulator (preference and session), which resets the app to a clean first-run state.
 
 ## Author
 
 Allan Ray Jasa, iOS developer. [LinkedIn](https://www.linkedin.com/in/allan-ray-jasa/)
+
+## License
+
+MIT. See [LICENSE](LICENSE).
