@@ -5,11 +5,9 @@ A SwiftUI iOS app that demonstrates a secure authentication flow: email/password
 I built it as a portfolio project to show how I structure a small, testable iOS app with modern Apple frameworks, and to document the security trade-offs I made along the way.
 
 > **Status:** work in progress. See [Project status](#project-status) for what is done and what is planned.
-
-<img src="Screenshots/IMG_2146.PNG" width="200" alt="App Login Screen">
-<img src="Screenshots/IMG_2145.PNG" width="200" alt="App Login Screen">
-<img src="Screenshots/IMG_2144.PNG" width="200" alt="App Login Screen">
-<img src="Screenshots/IMG_2147.PNG" width="200" alt="App Login Screen">
+<p align="left">
+     <img src="Screenshots/IMG_2146.PNG" width="180" alt="Login Screen"><img src="Screenshots/IMG_2145.PNG" width="180" alt="Home Screen"><img src="Screenshots/IMG_2144.PNG" width="180" alt="Settings Screen"><img src="Screenshots/IMG_2147.PNG" width="180" alt="Locked Screen">
+</p>
 
 <!-- Add 3-4 screenshots here: login, home, settings, lock screen.
      e.g. <img src="docs/login.png" width="240"> -->
