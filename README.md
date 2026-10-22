@@ -6,10 +6,10 @@ I built it as a portfolio project to show how I structure a small, testable iOS 
 
 > **Status:** work in progress. See [Project status](#project-status) for what is done and what is planned.
 
-<img src="Screenshots/IMG_2146.PNG" width="275" alt="App Login Screen">
-<img src="Screenshots/IMG_2145.PNG" width="275" alt="App Login Screen">
-<img src="Screenshots/IMG_2144.PNG" width="275" alt="App Login Screen">
-<img src="Screenshots/IMG_2147.PNG" width="275" alt="App Login Screen">
+<img src="Screenshots/IMG_2146.PNG" width="200" alt="App Login Screen">
+<img src="Screenshots/IMG_2145.PNG" width="200" alt="App Login Screen">
+<img src="Screenshots/IMG_2144.PNG" width="200" alt="App Login Screen">
+<img src="Screenshots/IMG_2147.PNG" width="200" alt="App Login Screen">
 
 <!-- Add 3-4 screenshots here: login, home, settings, lock screen.
      e.g. <img src="docs/login.png" width="240"> -->
