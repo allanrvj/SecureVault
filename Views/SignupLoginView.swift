@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SignupLoginScreen: View {
+struct SignupLoginView: View {
     
     @State private var email = ""
     @State private var password = ""
@@ -60,6 +60,8 @@ struct SignupLoginScreen: View {
     }
 }
 
+#if DEBUG
 #Preview {
-    SignupLoginScreen(viewModel: .preview)
+    SignupLoginView(viewModel: .preview)
 }
+#endif // DEBUG

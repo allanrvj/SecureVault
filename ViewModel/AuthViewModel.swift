@@ -12,21 +12,36 @@ import Supabase
 @Observable
 final class AuthViewModel {
     enum State {
-        case loading, signedOut, signedIn
+        case loading, locked, signedOut, signedIn
     }
     
     var state: State = .loading
-    private var isSubmitting = false
-    private var errorMessage: String?
-    
+    var errorMessage: String?
+    var isSubmitting = false
+    private(set) var settingsMessage: String?
+    private(set) var isBiometricLockEnabled = false
+    private(set) var deviceLockUnavailable = false
+    private var isAuthenticating = false
+        
     private let service: AuthService
+    private let authenticator: DeviceAuthenticator
+    private let preference: BiometricPreference
     
-    init(service: AuthService) {
+    init(service: AuthService,
+         authenticator: DeviceAuthenticator,
+         preference: BiometricPreference) {
         self.service = service
+        self.authenticator = authenticator
+        self.preference = preference
     }
     
     func restoreSession() async {
-        state = await service.hasValidSession() ? .signedIn : .signedOut
+        guard await service.hasValidSession() else {
+            state = .signedOut
+            return
+        }
+        isBiometricLockEnabled = preference.isEnabled()
+        state = isBiometricLockEnabled ? .locked : .signedIn
     }
     
     func signIn(email: String, password: String) async {
@@ -50,4 +65,60 @@ final class AuthViewModel {
         }
         state = .signedOut
     }
+    
+    func unlock() async {
+        guard state == .locked, !isAuthenticating else { return }
+        isAuthenticating = true
+        defer { isAuthenticating = false }
+
+        switch await authenticator.authenticate(reason: "Unlock SecureVault") {
+        case .success:
+            state = .signedIn
+        case .unavailable:
+            // Gate can't be enforced; don't lock the user out of their own vault
+            deviceLockUnavailable = true
+            state = .signedIn
+        case .cancelled, .failed:
+            state = .locked
+        }
+    }
+    
+    func setBiometricLock(_ enabled: Bool) async {
+        settingsMessage = nil
+
+        guard enabled else {
+            save(false)
+            return
+        }
+
+        guard !isAuthenticating else { return }
+        isAuthenticating = true
+        defer { isAuthenticating = false }
+
+        switch await authenticator.authenticate(reason: "Confirm to turn on Face ID unlock") {
+        case .success:
+            save(true)
+        case .cancelled, .failed:
+            break // the switch stays off
+        case .unavailable:
+            settingsMessage = "Set up a device passcode or Face ID in iOS Settings first."
+        }
+    }
+    
+    private func save(_ enabled: Bool) {
+        do {
+            try preference.setEnabled(enabled)
+            isBiometricLockEnabled = enabled
+        } catch {
+            settingsMessage = "Couldn't save the setting."
+        }
+    }
+    
+    #if DEBUG
+    func resetBiometricLock() {
+        preference.reset()
+        isBiometricLockEnabled = false
+        settingsMessage = nil
+    }
+    #endif
 }

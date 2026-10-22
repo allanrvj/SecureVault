@@ -33,11 +33,26 @@
 		3E18D5DE307DBD67009BC34F /* SecureVault.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SecureVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E18D5EB307DBD69009BC34F /* SecureVaultTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SecureVaultTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E18D5F5307DBD69009BC34F /* SecureVaultUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SecureVaultUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E18D6433088C3DE009BC34F /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		3E18D6473088C46A009BC34F /* Secrets.example.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Secrets.example.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		3E18D64A30899421009BC34F /* Exceptions for "SecureVault" folder in "SecureVault" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 3E18D5DD307DBD67009BC34F /* SecureVault */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3E18D5E0307DBD67009BC34F /* SecureVault */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3E18D64A30899421009BC34F /* Exceptions for "SecureVault" folder in "SecureVault" target */,
+			);
 			path = SecureVault;
 			sourceTree = "<group>";
 		};
@@ -114,6 +129,8 @@
 		3E18D5D5307DBD67009BC34F = {
 			isa = PBXGroup;
 			children = (
+				3E18D6433088C3DE009BC34F /* Secrets.xcconfig */,
+				3E18D6473088C46A009BC34F /* Secrets.example.xcconfig */,
 				3E18D62D3083815D009BC34F /* Preview */,
 				3E18D6243082FC65009BC34F /* Services */,
 				3E18D61E30808548009BC34F /* Extensions */,
@@ -336,6 +353,7 @@
 /* Begin XCBuildConfiguration section */
 		3E18D5FD307DBD69009BC34F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3E18D6433088C3DE009BC34F /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -400,6 +418,7 @@
 		};
 		3E18D5FE307DBD69009BC34F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3E18D6433088C3DE009BC34F /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -465,6 +484,8 @@
 				DEVELOPMENT_TEAM = 9R9C872728;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SecureVault/Info.plist;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app requires Face ID to securely authenticate your profile";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -498,6 +519,8 @@
 				DEVELOPMENT_TEAM = 9R9C872728;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SecureVault/Info.plist;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app requires Face ID to securely authenticate your profile";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

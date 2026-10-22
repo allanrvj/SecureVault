@@ -13,11 +13,13 @@ struct SecureVaultApp: App {
     @State private var authViewModel = AuthViewModel(
         service: SupabaseAuthService(
             client: SupabaseClient(
-                supabaseURL: URL(string: "https://yybwnewqjzlbngelcwql.supabase.co")!,
-                supabaseKey: "sb_publishable_xKGo112KcXU1eNrLDyxldQ_ldiAhB2C",
+                supabaseURL: AppConfig.supabaseURL,
+                supabaseKey: AppConfig.supabaseKey,
                 options: SupabaseClientOptions (auth: .init(emitLocalSessionAsInitialSession: true))
             )
-        )
+        ),
+        authenticator: SystemDeviceAuthenticator(),
+        preference: BiometricPreference(store: SystemKeychainStore())
     )
     
     var body: some Scene {
@@ -34,8 +36,10 @@ struct SecureVaultApp: App {
             case .loading:
                 ProgressView()
                     .task { await viewModel.restoreSession() }
+            case .locked:
+                LockedView(viewModel: viewModel)
             case .signedOut:
-                SignupLoginScreen(viewModel: viewModel)
+                SignupLoginView(viewModel: viewModel)
             case .signedIn:
                 HomeView(viewModel: viewModel)
             }
