@@ -65,7 +65,7 @@ SecureVault/
 
 ### Dependency injection
 
-The view model receives its dependencies through its initializer. In the app these are the real implementations; in previews they are in-memory fakes, and the planned unit tests will use the same approach. No view or view model imports `LocalAuthentication` directly, which is what makes the lock logic testable without a device.
+The view model receives its dependencies through its initializer. In the app these are the real implementations; in previews they are in-memory fakes, and the unit tests use the same approach. No view or view model imports `LocalAuthentication` directly, which is what makes the lock logic testable without a device.
 
 ## Design decisions
 
@@ -105,7 +105,7 @@ These are the decisions I'd want a reviewer to know about, and why I made them.
 - [x] Keychain wrapper behind a protocol
 - [x] Face ID / Touch ID gate and lock screen
 - [x] Settings screen with the Face ID toggle
-- [ ] Unit tests for the view model and the preference (using fakes)
+- [x] Unit tests for the view model and the preference (using fakes)
 - [ ] Sign-up flow
 - [ ] Session expiry and re-lock after backgrounding
 
@@ -116,7 +116,7 @@ Requirements: Xcode (version: 26.3), iOS (deployment target: 18.6).
 1. Clone the repository and open `SecureVault.xcodeproj`.
 2. Swift Package Manager resolves the Supabase dependency automatically.
 3. Copy `Secrets.example.xcconfig` to `Secrets.xcconfig` and fill in your own Supabase project URL and publishable (anon) key. `Secrets.xcconfig` is git-ignored, so your keys are never committed. Don't use a service-role key in a client app.
-4. In the Supabase dashboard, create a test user under **Authentication → Users**. The app has no sign-up flow yet, so you need an existing account to log in.
+4. In your own Supabase dashboard, go to **Authentication → Users → Add user** and create a test account (tick auto-confirm if offered). The app has no sign-up flow yet, so log in with that account.
 5. `NSFaceIDUsageDescription` ("Privacy - Face ID Usage Description") is already set in `Info.plist`.
 6. Run on a simulator. For Face ID, enable it under **Features > Face ID > Enrolled** and use **Matching Face** / **Non-matching Face** to simulate a scan. Test at least once on a real device.
 

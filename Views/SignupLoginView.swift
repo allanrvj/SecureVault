@@ -35,14 +35,25 @@ struct SignupLoginView: View {
                 BorderedField {
                     SecureField("Password", text: $password)
                 }
-
+                
+                if let errorMessage = viewModel.errorMessage {
+                    Text(errorMessage)
+                        .font(.footnote)
+                        .foregroundStyle(.red)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                }
                 
                 Button(action: {
                     Task {
                         await viewModel.signIn(email: email, password: password)
                     }
                 }) {
-                    Text("Login to system")
+                    if viewModel.isSubmitting {
+                        ProgressView()
+                    } else {
+                        Text("Login to system")
+                    }
                 }.buttonStyle(.borderedProminent)
                     .controlSize(.large)
                     .shadow(radius: 3)

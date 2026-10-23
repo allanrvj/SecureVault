@@ -1,0 +1,38 @@
+{
+  "configurations" : [
+    {
+      "id" : "41C18F33-1ECB-44C0-B279-94895C09CA6F",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:SecureVault.xcodeproj",
+      "identifier" : "3E18D5DD307DBD67009BC34F",
+      "name" : "SecureVault"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:SecureVault.xcodeproj",
+        "identifier" : "3E18D5EA307DBD69009BC34F",
+        "name" : "SecureVaultTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:SecureVault.xcodeproj",
+        "identifier" : "3E18D5F4307DBD69009BC34F",
+        "name" : "SecureVaultUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

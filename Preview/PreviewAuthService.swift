@@ -21,16 +21,12 @@ extension AuthViewModel {
                       preference: BiometricPreference(store: FakeKeychainStore()))
     }
 }
-#endif // DEBUG
 
-#if DEBUG
 struct FakeDeviceAuthenticator: DeviceAuthenticator {
     var result: BiometricResult = .success
     func authenticate(reason: String) async -> BiometricResult { result }
 }
-#endif
 
-#if DEBUG
 final class FakeKeychainStore: KeychainStore {
     private var storage: [String: Data] = [:]
 
