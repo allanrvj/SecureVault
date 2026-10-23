@@ -27,8 +27,8 @@ I built it as a portfolio project to show how I structure a small, testable iOS 
 | Concurrency | Swift concurrency (`async`/`await`) |
 | Biometrics | LocalAuthentication (`LAContext`) |
 | Secure storage | Keychain Services (Security framework) |
-| Backend | Supabase Swift SDK 2.55.4 (via Swift Package Manager) |
-| Testing | XCTest / Swift Testing with hand-written fakes (planned) |
+| Backend | Supabase Swift SDK (via Swift Package Manager) |
+| Testing | XCTest / Swift Testing with hand-written fakes |
 
 ## Architecture
 
