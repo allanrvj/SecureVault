@@ -12,11 +12,7 @@ struct SignupLoginView: View {
     @State private var email = ""
     @State private var password = ""
     
-    private let viewModel: AuthViewModel
-    
-    init(viewModel: AuthViewModel) {
-        self.viewModel = viewModel
-    }
+    let viewModel: AuthViewModel
     
     var body: some View {
         ZStack {
@@ -67,7 +63,7 @@ struct SignupLoginView: View {
     }
     
     private var canSubmit: Bool {
-        email.isValidEmail && !password.isEmpty
+        email.isValidEmail && !password.isEmpty && !viewModel.isSubmitting
     }
 }
 
