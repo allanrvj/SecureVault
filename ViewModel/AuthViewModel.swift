@@ -18,11 +18,12 @@ final class AuthViewModel {
     var state: State = .loading
     var errorMessage: String?
     var isSubmitting = false
+
     private(set) var settingsMessage: String?
     private(set) var isBiometricLockEnabled = false
     private(set) var deviceLockUnavailable = false
+
     private var isAuthenticating = false
-        
     private let service: AuthService
     private let authenticator: DeviceAuthenticator
     private let preference: BiometricPreference

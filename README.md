@@ -107,7 +107,7 @@ These are the decisions I'd want a reviewer to know about, and why I made them.
 - [x] Settings screen with the Face ID toggle
 - [x] Unit tests for the view model and the preference (using fakes)
 - [ ] Sign-up flow
-- [ ] Session expiry and re-lock after backgrounding
+- [ ] Re-lock after backgrounding for 5 mins
 
 ## Getting started
 
