@@ -15,10 +15,17 @@ struct HomeView: View {
                 VStack(spacing: 20) {
                     Text("Home")
                         .font(.title)
-                    Button("Log out") {
+                    Button(action: {
                         Task { await viewModel.signOut() }
+                    }){
+                        if viewModel.isSubmitting {
+                            ProgressView()
+                        } else {
+                            Text("Log out")
+                        }
                     }
-                    .buttonStyle(.borderedProminent)
+                    .primaryButtonStyle()
+                    .disabled(viewModel.isSubmitting)
                 }
                 .navigationTitle("Home")
                 .navigationBarTitleDisplayMode(.inline)

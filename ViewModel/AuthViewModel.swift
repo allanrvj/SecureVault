@@ -59,6 +59,8 @@ final class AuthViewModel {
     }
     
     func signOut() async {
+        isSubmitting = true
+        defer { isSubmitting = false }
         do {
             try await service.signOut()
         } catch {

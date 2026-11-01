@@ -50,9 +50,8 @@ struct SignupLoginView: View {
                     } else {
                         Text("Login to system")
                     }
-                }.buttonStyle(.borderedProminent)
-                    .controlSize(.large)
-                    .shadow(radius: 3)
+                }
+                    .primaryButtonStyle()
                     .padding()
                     .disabled(!canSubmit)
                 

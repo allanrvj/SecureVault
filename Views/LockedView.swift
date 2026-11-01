@@ -17,10 +17,9 @@ struct LockedView: View {
             Text("SecureVault is locked")
                 .font(.title2)
             Button("Unlock") { Task { await viewModel.unlock() } }
-                .buttonStyle(.borderedProminent)
+                .primaryButtonStyle()
             Button("Sign out", role: .destructive) { Task { await viewModel.signOut() } }
         }
-        .task { await viewModel.unlock() }
     }
 }
 
