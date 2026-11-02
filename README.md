@@ -8,7 +8,7 @@ I built it as a portfolio project to show how I structure a small, testable iOS 
 
 | Login | Home | Settings | Locked Mode |
 |:---:|:---:|:---:|:---:|
-| <img src="Screenshots/IMG_2146.PNG" width="180" alt="Login screen"> | <img src="Screenshots/IMG_2145.PNG" width="180" alt="Home screen"> | <img src="Screenshots/IMG_2144.PNG" width="180" alt="Settings screen"> | <img src="Screenshots/IMG_2147.PNG" width="180" alt="Locked mode"> |
+| <img src="Screenshots/login.jpg" width="200" alt="Login screen"> | <img src="Screenshots/home.jpg" width="200" alt="Home screen"> | <img src="Screenshots/settings.jpg" width="160" alt="Settings screen"> | <img src="Screenshots/locked.jpg" width="180" alt="Locked mode"> |
 
 ## What it does
 
