@@ -139,7 +139,6 @@ final class AuthViewModelTests: XCTestCase {
         XCTAssertNil(sut.settingsMessage)
         XCTAssertFalse(sut.isSubmitting)
         XCTAssertFalse(sut.isBiometricLockEnabled)
-        XCTAssertFalse(sut.deviceLockUnavailable)
     }
 
     // MARK: - restoreSession
@@ -293,7 +292,6 @@ final class AuthViewModelTests: XCTestCase {
         await harness.sut.unlock()
 
         XCTAssertEqual(harness.sut.state, .signedIn)
-        XCTAssertFalse(harness.sut.deviceLockUnavailable)
     }
 
     func test_unlock_usesExpectedAuthenticationReason() async {
@@ -311,7 +309,6 @@ final class AuthViewModelTests: XCTestCase {
         await harness.sut.unlock()
 
         XCTAssertEqual(harness.sut.state, .signedIn)
-        XCTAssertTrue(harness.sut.deviceLockUnavailable)
     }
 
     func test_unlock_whenCancelled_staysLocked() async {
@@ -321,7 +318,6 @@ final class AuthViewModelTests: XCTestCase {
         await harness.sut.unlock()
 
         XCTAssertEqual(harness.sut.state, .locked)
-        XCTAssertFalse(harness.sut.deviceLockUnavailable)
     }
 
     func test_unlock_whenAuthenticationFails_staysLocked() async {
@@ -331,7 +327,6 @@ final class AuthViewModelTests: XCTestCase {
         await harness.sut.unlock()
 
         XCTAssertEqual(harness.sut.state, .locked)
-        XCTAssertFalse(harness.sut.deviceLockUnavailable)
     }
 
     func test_unlock_afterCancellation_canBeRetried() async {

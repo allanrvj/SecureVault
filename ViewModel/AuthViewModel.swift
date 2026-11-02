@@ -21,7 +21,6 @@ final class AuthViewModel {
 
     private(set) var settingsMessage: String?
     private(set) var isBiometricLockEnabled = false
-    private(set) var deviceLockUnavailable = false
 
     private var isAuthenticating = false
     private let service: AuthService
@@ -66,6 +65,9 @@ final class AuthViewModel {
         } catch {
             // Even if the network call fails, treat the user as signed out locally
         }
+        // We can also put this code inside defer, or inside do{} and also inside catch{}
+        // but I prefer it this way because it deliberately shows that no matter what happens
+        // the state will be signed out
         state = .signedOut
     }
     
@@ -78,8 +80,9 @@ final class AuthViewModel {
         case .success:
             state = .signedIn
         case .unavailable:
-            // Gate can't be enforced; don't lock the user out of their own vault
-            deviceLockUnavailable = true
+            // No device passcode is set (possibly removed), but the flag to authenticate using FaceID
+            // is still on in the Keychain preferences, and there is nothing to verify against.
+            // Let the user in rather than trap them on the lock screen.
             state = .signedIn
         case .cancelled, .failed:
             state = .locked
@@ -123,5 +126,5 @@ final class AuthViewModel {
         isBiometricLockEnabled = false
         settingsMessage = nil
     }
-    #endif
+    #endif // DEBUG
 }
