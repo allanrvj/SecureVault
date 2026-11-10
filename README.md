@@ -24,11 +24,11 @@ I built it as a portfolio project to show how I structure a small, testable iOS 
 |---|---|
 | UI | SwiftUI, `NavigationStack` |
 | State | Observation framework (`@Observable`), `@MainActor` |
-| Concurrency | Swift concurrency (`async`/`await`) |
+| Concurrency | Swift 6 language mode with complete strict concurrency checking, `async`/`await` |
 | Biometrics | LocalAuthentication (`LAContext`) |
 | Secure storage | Keychain Services (Security framework) |
 | Backend | Supabase Swift SDK (via Swift Package Manager) |
-| Testing | XCTest / Swift Testing with hand-written fakes |
+| Testing | XCTest with hand-written fakes |
 
 ## Architecture
 
@@ -54,7 +54,7 @@ SecureVault/
 ├── Views/              SignupLoginView, HomeView, SettingsView, LockedView
 ├── Components/         Reusable UI (BorderedField)
 ├── Extensions/         String+Validation
-├─- Preview/            Fakes used by SwiftUI previews (DEBUG only)
+├── Preview/            Fakes used by SwiftUI previews (DEBUG only)
 ├── Screenshots/                Images used in this README
 └── Secrets.example.xcconfig    Template for your own Secrets.xcconfig (not committed)
 ```
@@ -111,7 +111,7 @@ These are the decisions I'd want a reviewer to know about, and why I made them.
 
 ## Getting started
 
-Requirements: Xcode (version: 26.3), iOS (deployment target: 18.6).
+Requirements: Xcode (version: 26.3) (Swift 6 language mode), iOS (deployment target: 18.6).
 
 1. Clone the repository and open `SecureVault.xcodeproj`.
 2. Swift Package Manager resolves the Supabase dependency automatically.
