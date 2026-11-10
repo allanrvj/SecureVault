@@ -11,7 +11,9 @@ struct BiometricPreference {
     private let store: KeychainStore
     private let key = "biometricUnlockEnabled"
 
-    init(store: KeychainStore) { self.store = store }
+    init(store: KeychainStore) {
+        self.store = store
+    }
 
     func isEnabled() -> Bool {
         do {
@@ -22,14 +24,14 @@ struct BiometricPreference {
             return true
         }
     }
-    
+
     func setEnabled(_ enabled: Bool) throws {
         try store.set(Data([enabled ? 1 : 0]), for: key)
     }
-    
+
     #if DEBUG
-    func reset() {
-        try? store.delete(key)
-    }
+        func reset() {
+            try? store.delete(key)
+        }
     #endif
 }

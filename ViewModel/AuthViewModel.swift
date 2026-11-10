@@ -14,7 +14,7 @@ final class AuthViewModel {
     enum State {
         case loading, locked, signedOut, signedIn
     }
-    
+
     var state: State = .loading
     var errorMessage: String?
     var isSubmitting = false
@@ -26,15 +26,16 @@ final class AuthViewModel {
     private let service: AuthService
     private let authenticator: DeviceAuthenticator
     private let preference: BiometricPreference
-    
+
     init(service: AuthService,
          authenticator: DeviceAuthenticator,
-         preference: BiometricPreference) {
+         preference: BiometricPreference)
+    {
         self.service = service
         self.authenticator = authenticator
         self.preference = preference
     }
-    
+
     func restoreSession() async {
         guard await service.hasValidSession() else {
             state = .signedOut
@@ -43,12 +44,12 @@ final class AuthViewModel {
         isBiometricLockEnabled = preference.isEnabled()
         state = isBiometricLockEnabled ? .locked : .signedIn
     }
-    
+
     func signIn(email: String, password: String) async {
         isSubmitting = true
         errorMessage = nil
         defer { isSubmitting = false }
-        
+
         do {
             try await service.signIn(email: email, password: password)
             state = .signedIn
@@ -56,7 +57,7 @@ final class AuthViewModel {
             errorMessage = "Sign in failed. Check your email and password."
         }
     }
-    
+
     func signOut() async {
         isSubmitting = true
         defer { isSubmitting = false }
@@ -70,7 +71,7 @@ final class AuthViewModel {
         // the state will be signed out
         state = .signedOut
     }
-    
+
     func unlock() async {
         guard state == .locked, !isAuthenticating else { return }
         isAuthenticating = true
@@ -88,7 +89,7 @@ final class AuthViewModel {
             state = .locked
         }
     }
-    
+
     func setBiometricLock(_ enabled: Bool) async {
         settingsMessage = nil
 
@@ -110,7 +111,7 @@ final class AuthViewModel {
             settingsMessage = "Set up a device passcode or Face ID in iOS Settings first."
         }
     }
-    
+
     private func save(_ enabled: Bool) {
         do {
             try preference.setEnabled(enabled)
@@ -119,12 +120,12 @@ final class AuthViewModel {
             settingsMessage = "Couldn't save the setting."
         }
     }
-    
+
     #if DEBUG
-    func resetBiometricLock() {
-        preference.reset()
-        isBiometricLockEnabled = false
-        settingsMessage = nil
-    }
+        func resetBiometricLock() {
+            preference.reset()
+            isBiometricLockEnabled = false
+            settingsMessage = nil
+        }
     #endif // DEBUG
 }

@@ -24,6 +24,6 @@ struct SupabaseAuthService: AuthService {
 
     func hasValidSession() async -> Bool {
         // Throws if there is no session (or it can't be refreshed)
-        (try? await client.auth.session) != nil
+        await (try? client.auth.session) != nil
     }
 }

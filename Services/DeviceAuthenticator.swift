@@ -1,5 +1,5 @@
 //
-//  BiometricAuthenticator.swift
+//  DeviceAuthenticator.swift
 //  SecureVault
 //
 //  Created by Allan Ray Jasa on 20/10/2026.
@@ -19,12 +19,12 @@ protocol DeviceAuthenticator {
 struct SystemDeviceAuthenticator: DeviceAuthenticator {
     func authenticate(reason: String) async -> BiometricResult {
         let context = LAContext() // fresh context per attempt
-        
+
         var error: NSError?
         guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) else {
             return .unavailable // no passcode set
         }
-        
+
         do {
             let ok = try await context.evaluatePolicy(
                 .deviceOwnerAuthentication,

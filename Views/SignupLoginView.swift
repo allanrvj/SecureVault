@@ -8,30 +8,29 @@
 import SwiftUI
 
 struct SignupLoginView: View {
-    
     @State private var email = ""
     @State private var password = ""
-    
+
     let viewModel: AuthViewModel
-    
+
     var body: some View {
         ZStack {
             Color(.systemBackground)
             VStack {
                 Text("SecureVault").font(.title2).foregroundStyle(Color.accentColor).padding().bold()
-                
+
                 Spacer()
-                
+
                 Text("Welcome back").font(.title).padding(50)
 
                 BorderedField {
                     TextField("Email", text: $email)
                 }
-                
+
                 BorderedField {
                     SecureField("Password", text: $password)
                 }
-                
+
                 if let errorMessage = viewModel.errorMessage {
                     Text(errorMessage)
                         .font(.footnote)
@@ -39,7 +38,7 @@ struct SignupLoginView: View {
                         .multilineTextAlignment(.center)
                         .padding(.horizontal)
                 }
-                
+
                 Button(action: {
                     Task {
                         await viewModel.signIn(email: email, password: password)
@@ -51,23 +50,22 @@ struct SignupLoginView: View {
                         Text("Login to system")
                     }
                 }
-                    .primaryButtonStyle()
-                    .padding()
-                    .disabled(!canSubmit)
-                
+                .primaryButtonStyle()
+                .padding()
+                .disabled(!canSubmit)
+
                 Spacer()
             }
- 
         }
     }
-    
+
     private var canSubmit: Bool {
         email.isValidEmail && !password.isEmpty && !viewModel.isSubmitting
     }
 }
 
 #if DEBUG
-#Preview {
-    SignupLoginView(viewModel: .preview)
-}
+    #Preview {
+        SignupLoginView(viewModel: .preview)
+    }
 #endif // DEBUG

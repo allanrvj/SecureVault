@@ -5,8 +5,8 @@
 //  Created by Allan Ray Jasa on 13/10/2026.
 //
 
-import SwiftUI
 import Supabase
+import SwiftUI
 
 @main
 struct SecureVaultApp: App {
@@ -15,19 +15,19 @@ struct SecureVaultApp: App {
             client: SupabaseClient(
                 supabaseURL: AppConfig.supabaseURL,
                 supabaseKey: AppConfig.supabaseKey,
-                options: SupabaseClientOptions (auth: .init(emitLocalSessionAsInitialSession: true))
+                options: SupabaseClientOptions(auth: .init(emitLocalSessionAsInitialSession: true))
             )
         ),
         authenticator: SystemDeviceAuthenticator(),
         preference: BiometricPreference(store: SystemKeychainStore())
     )
-    
+
     var body: some Scene {
         WindowGroup {
             RootView(viewModel: authViewModel)
         }
     }
-    
+
     struct RootView: View {
         let viewModel: AuthViewModel
 

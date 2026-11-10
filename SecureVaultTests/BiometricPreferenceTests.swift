@@ -5,17 +5,16 @@
 //  Created by Allan Ray Jasa on 23/10/2026.
 //
 
-import XCTest
 @testable import SecureVault
+import XCTest
 
 private struct TestError: Error {}
 
-// `@MainActor` + `async` on every test: a synchronous test of a main-actor
-// type crashes with a bad free on iOS 26.3. This stays safe whether or not the
-// target's default actor isolation makes `BiometricPreference` main-actor.
+/// `@MainActor` + `async` on every test: a synchronous test of a main-actor
+/// type crashes with a bad free on iOS 26.3. This stays safe whether or not the
+/// target's default actor isolation makes `BiometricPreference` main-actor.
 @MainActor
 final class BiometricPreferenceTests: XCTestCase {
-
     // MARK: Harness
 
     private let expectedKey = "biometricUnlockEnabled"
@@ -63,6 +62,7 @@ final class BiometricPreferenceTests: XCTestCase {
     }
 
     // MARK: - isEnabled (unexpected stored data)
+
     //
     // These document the current behaviour: only `Data([1])` counts as enabled,
     // so anything else that can be read is treated as disabled.
@@ -172,41 +172,41 @@ final class BiometricPreferenceTests: XCTestCase {
     // MARK: - reset
 
     #if DEBUG
-    func test_reset_afterSetEnabledFalse_restoresDefaultOn() async throws {
-        let (sut, store) = makeSUT()
-        try sut.setEnabled(false)
-        XCTAssertFalse(sut.isEnabled())
+        func test_reset_afterSetEnabledFalse_restoresDefaultOn() async throws {
+            let (sut, store) = makeSUT()
+            try sut.setEnabled(false)
+            XCTAssertFalse(sut.isEnabled())
 
-        sut.reset()
+            sut.reset()
 
-        XCTAssertTrue(store.storage.isEmpty)
-        XCTAssertTrue(sut.isEnabled(), "Never-set preference defaults to on")
-    }
+            XCTAssertTrue(store.storage.isEmpty)
+            XCTAssertTrue(sut.isEnabled(), "Never-set preference defaults to on")
+        }
 
-    func test_reset_always_deletesExpectedKey() async {
-        let (sut, store) = makeSUT()
+        func test_reset_always_deletesExpectedKey() async {
+            let (sut, store) = makeSUT()
 
-        sut.reset()
+            sut.reset()
 
-        XCTAssertEqual(store.deletedKeys, [expectedKey])
-    }
+            XCTAssertEqual(store.deletedKeys, [expectedKey])
+        }
 
-    func test_reset_whenNothingStored_keepsDefaultOn() async {
-        let (sut, _) = makeSUT()
+        func test_reset_whenNothingStored_keepsDefaultOn() async {
+            let (sut, _) = makeSUT()
 
-        sut.reset()
+            sut.reset()
 
-        XCTAssertTrue(sut.isEnabled())
-    }
+            XCTAssertTrue(sut.isEnabled())
+        }
 
-    func test_reset_whenKeychainDeleteFails_keepsStoredValue() async throws {
-        let (sut, store) = makeSUT()
-        try sut.setEnabled(false)
-        store.deleteError = TestError()
+        func test_reset_whenKeychainDeleteFails_keepsStoredValue() async throws {
+            let (sut, store) = makeSUT()
+            try sut.setEnabled(false)
+            store.deleteError = TestError()
 
-        sut.reset()
+            sut.reset()
 
-        XCTAssertFalse(sut.isEnabled(), "A failed delete leaves the stored preference untouched")
-    }
+            XCTAssertFalse(sut.isEnabled(), "A failed delete leaves the stored preference untouched")
+        }
     #endif
 }

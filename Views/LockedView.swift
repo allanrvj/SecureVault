@@ -24,7 +24,7 @@ struct LockedView: View {
 }
 
 #if DEBUG
-#Preview {
-    LockedView(viewModel: .preview)
-}
+    #Preview {
+        LockedView(viewModel: .preview)
+    }
 #endif // DEBUG

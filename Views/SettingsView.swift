@@ -23,11 +23,11 @@ struct SettingsView: View {
                 }
             }
             #if DEBUG
-            Section("Debug") {
-                Button("Reset Face ID preference", role: .destructive) {
-                    viewModel.resetBiometricLock()
+                Section("Debug") {
+                    Button("Reset Face ID preference", role: .destructive) {
+                        viewModel.resetBiometricLock()
+                    }
                 }
-            }
             #endif // DEBUG
         }
         .navigationTitle("Settings")
@@ -36,7 +36,7 @@ struct SettingsView: View {
 }
 
 #if DEBUG
-#Preview {
-    SettingsView(viewModel: .preview)
-}
+    #Preview {
+        SettingsView(viewModel: .preview)
+    }
 #endif // DEBUG

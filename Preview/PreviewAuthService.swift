@@ -8,30 +8,40 @@
 import Foundation
 
 #if DEBUG
-struct PreviewAuthService: AuthService {
-    func signIn(email: String, password: String) async throws {}
-    func signOut() async throws {}
-    func hasValidSession() async -> Bool { true }
-}
-
-extension AuthViewModel {
-    static var preview: AuthViewModel {
-        AuthViewModel(service: PreviewAuthService(),
-                      authenticator: FakeDeviceAuthenticator(),
-                      preference: BiometricPreference(store: FakeKeychainStore()))
+    struct PreviewAuthService: AuthService {
+        func signIn(email _: String, password _: String) async throws {}
+        func signOut() async throws {}
+        func hasValidSession() async -> Bool {
+            true
+        }
     }
-}
 
-struct FakeDeviceAuthenticator: DeviceAuthenticator {
-    var result: BiometricResult = .success
-    func authenticate(reason: String) async -> BiometricResult { result }
-}
+    extension AuthViewModel {
+        static var preview: AuthViewModel {
+            AuthViewModel(service: PreviewAuthService(),
+                          authenticator: FakeDeviceAuthenticator(),
+                          preference: BiometricPreference(store: FakeKeychainStore()))
+        }
+    }
 
-final class FakeKeychainStore: KeychainStore {
-    private var storage: [String: Data] = [:]
+    struct FakeDeviceAuthenticator: DeviceAuthenticator {
+        var result: BiometricResult = .success
+        func authenticate(reason _: String) async -> BiometricResult {
+            result
+        }
+    }
 
-    func get(_ key: String) throws -> Data? { storage[key] }
-    func set(_ data: Data, for key: String) throws { storage[key] = data }
-    func delete(_ key: String) throws {}
-}
+    final class FakeKeychainStore: KeychainStore {
+        private var storage: [String: Data] = [:]
+
+        func get(_ key: String) throws -> Data? {
+            storage[key]
+        }
+
+        func set(_ data: Data, for key: String) throws {
+            storage[key] = data
+        }
+
+        func delete(_: String) throws {}
+    }
 #endif // DEBUG

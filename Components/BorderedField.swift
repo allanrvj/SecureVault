@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BorderedField<Content: View>: View {
     @ViewBuilder var content: Content
-    
+
     var body: some View {
         content
             .autocorrectionDisabled()
@@ -26,5 +26,5 @@ struct BorderedField<Content: View>: View {
 
 #Preview {
     @Previewable @State var username = ""
-    BorderedField { TextField("Username", text: $username ) }
+    BorderedField { TextField("Username", text: $username) }
 }

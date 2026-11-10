@@ -5,10 +5,11 @@
 //  Created by Allan Ray Jasa on 22/10/2026.
 //
 
-import XCTest
 @testable import SecureVault
+import XCTest
 
 // MARK: - Test doubles
+
 //
 // The fakes are `@unchecked Sendable` so they compile under both Swift 5 and
 // Swift 6 language modes. Tests drive them sequentially, so there is no real
@@ -35,7 +36,9 @@ private final class FakeAuthService: AuthService, @unchecked Sendable {
                 self.isSignInSuspended = true
             }
         }
-        if let signInError { throw signInError }
+        if let signInError {
+            throw signInError
+        }
     }
 
     func finishSignIn() {
@@ -46,10 +49,14 @@ private final class FakeAuthService: AuthService, @unchecked Sendable {
 
     func signOut() async throws {
         signOutCallCount += 1
-        if let signOutError { throw signOutError }
+        if let signOutError {
+            throw signOutError
+        }
     }
 
-    func hasValidSession() async -> Bool { hasSession }
+    func hasValidSession() async -> Bool {
+        hasSession
+    }
 }
 
 private final class FakeDeviceAuthenticator: DeviceAuthenticator, @unchecked Sendable {
@@ -60,7 +67,9 @@ private final class FakeDeviceAuthenticator: DeviceAuthenticator, @unchecked Sen
     private(set) var isSuspended = false
     private var continuation: CheckedContinuation<BiometricResult, Never>?
 
-    var callCount: Int { reasons.count }
+    var callCount: Int {
+        reasons.count
+    }
 
     func authenticate(reason: String) async -> BiometricResult {
         reasons.append(reason)
@@ -82,7 +91,6 @@ private final class FakeDeviceAuthenticator: DeviceAuthenticator, @unchecked Sen
 
 @MainActor
 final class AuthViewModelTests: XCTestCase {
-
     // MARK: Harness
 
     private struct Harness {
@@ -121,9 +129,12 @@ final class AuthViewModelTests: XCTestCase {
     /// a call that is suspended mid-flight without sleeping.
     private func waitUntil(_ condition: @autoclosure () -> Bool,
                            file: StaticString = #filePath,
-                           line: UInt = #line) async {
-        for _ in 0..<1_000 {
-            if condition() { return }
+                           line: UInt = #line) async
+    {
+        for _ in 0 ..< 1000 {
+            if condition() {
+                return
+            }
             await Task.yield()
         }
         XCTFail("Condition was not met in time", file: file, line: line)
@@ -508,26 +519,26 @@ final class AuthViewModelTests: XCTestCase {
     // MARK: - resetBiometricLock
 
     #if DEBUG
-    func test_resetBiometricLock_clearsFlagAndMessage() async {
-        let harness = makeHarness()
-        harness.authenticator.result = .unavailable
-        await harness.sut.setBiometricLock(true)
-        XCTAssertNotNil(harness.sut.settingsMessage)
+        func test_resetBiometricLock_clearsFlagAndMessage() async {
+            let harness = makeHarness()
+            harness.authenticator.result = .unavailable
+            await harness.sut.setBiometricLock(true)
+            XCTAssertNotNil(harness.sut.settingsMessage)
 
-        harness.sut.resetBiometricLock()
+            harness.sut.resetBiometricLock()
 
-        XCTAssertFalse(harness.sut.isBiometricLockEnabled)
-        XCTAssertNil(harness.sut.settingsMessage)
-    }
+            XCTAssertFalse(harness.sut.isBiometricLockEnabled)
+            XCTAssertNil(harness.sut.settingsMessage)
+        }
 
-    func test_resetBiometricLock_removesStoredPreference_soDefaultAppliesAgain() async throws {
-        let harness = makeHarness()
-        try harness.preference.setEnabled(false)
-        XCTAssertFalse(harness.preference.isEnabled())
+        func test_resetBiometricLock_removesStoredPreference_soDefaultAppliesAgain() async throws {
+            let harness = makeHarness()
+            try harness.preference.setEnabled(false)
+            XCTAssertFalse(harness.preference.isEnabled())
 
-        harness.sut.resetBiometricLock()
+            harness.sut.resetBiometricLock()
 
-        XCTAssertTrue(harness.preference.isEnabled(), "Never-set preference defaults to on")
-    }
+            XCTAssertTrue(harness.preference.isEnabled(), "Never-set preference defaults to on")
+        }
     #endif
 }
