@@ -1,0 +1,112 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+# A PR branch triggers both "push" and "pull_request"; cancel superseded runs.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  SCHEME: SecureVault
+  PROJECT: SecureVault.xcodeproj
+  XCODE_VERSION: "26.3"
+  DESTINATION: "platform=iOS Simulator,name=iPhone 17 Pro"
+
+jobs:
+  lint:
+    name: SwiftLint & SwiftFormat
+    runs-on: macos-26
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install SwiftLint and SwiftFormat
+        run: brew install swiftlint swiftformat
+
+      - name: SwiftLint
+        run: swiftlint lint --strict --reporter github-actions-logging
+
+      - name: SwiftFormat (lint only, no changes written)
+        run: swiftformat --lint .
+
+  build-and-test:
+    name: Build & Test
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Select Xcode
+        run: |
+          XCODE_APP="/Applications/Xcode_${XCODE_VERSION}.app"
+          if [ -d "$XCODE_APP" ]; then
+            sudo xcode-select -s "$XCODE_APP/Contents/Developer"
+          else
+            echo "::warning::Xcode ${XCODE_VERSION} is not on this runner image; using $(xcode-select -p)"
+            ls /Applications | grep -i xcode || true
+          fi
+          xcodebuild -version
+
+      # The real Secrets.xcconfig is gitignored; CI builds with the placeholder values.
+      - name: Create Secrets.xcconfig from example
+        run: |
+          EXAMPLE=$(find . -name 'Secrets.example.xcconfig' -not -path './SourcePackages/*' | head -n 1)
+          if [ -z "$EXAMPLE" ]; then
+            echo "::error::Secrets.example.xcconfig not found"
+            exit 1
+          fi
+          TARGET="$(dirname "$EXAMPLE")/Secrets.xcconfig"
+          [ -f "$TARGET" ] || cp "$EXAMPLE" "$TARGET"
+          echo "Using $TARGET"
+
+      - name: Cache Swift packages
+        uses: actions/cache@v4
+        with:
+          path: SourcePackages
+          key: spm-${{ runner.os }}-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            spm-${{ runner.os }}-
+
+      - name: Resolve packages
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project "$PROJECT" \
+            -scheme "$SCHEME" \
+            -clonedSourcePackagesDirPath SourcePackages
+
+      - name: Build for testing
+        run: |
+          set -o pipefail
+          xcodebuild build-for-testing \
+            -project "$PROJECT" \
+            -scheme "$SCHEME" \
+            -destination "$DESTINATION" \
+            -clonedSourcePackagesDirPath SourcePackages \
+            -skipMacroValidation \
+            -skipPackagePluginValidation \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Run tests
+        run: |
+          set -o pipefail
+          xcodebuild test-without-building \
+            -project "$PROJECT" \
+            -scheme "$SCHEME" \
+            -destination "$DESTINATION" \
+            -clonedSourcePackagesDirPath SourcePackages \
+            -resultBundlePath TestResults.xcresult \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults
+          path: TestResults.xcresult
+          retention-days: 7

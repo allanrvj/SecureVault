@@ -20,6 +20,7 @@ timeline.xctimeline
 # Swift Package Manager
 .build/
 .swiftpm/
+SourcePackages/
 Packages/
 Package.pins
 # Package.resolved
