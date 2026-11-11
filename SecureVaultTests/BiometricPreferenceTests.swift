@@ -8,8 +8,6 @@
 @testable import SecureVault
 import XCTest
 
-private struct TestError: Error {}
-
 /// `@MainActor` + `async` on every test: a synchronous test of a main-actor
 /// type crashes with a bad free on iOS 26.3. This stays safe whether or not the
 /// target's default actor isolation makes `BiometricPreference` main-actor.
