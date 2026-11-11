@@ -1,4 +1,4 @@
 --swiftversion 6.0
 --indent 4
 --exclude .build,SourcePackages
---disable redundantAsync
+--disable redundantAsync,wrapMultilineStatementBraces,braces

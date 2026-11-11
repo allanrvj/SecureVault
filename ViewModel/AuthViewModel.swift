@@ -29,8 +29,7 @@ final class AuthViewModel {
 
     init(service: AuthService,
          authenticator: DeviceAuthenticator,
-         preference: BiometricPreference)
-    {
+         preference: BiometricPreference) {
         self.service = service
         self.authenticator = authenticator
         self.preference = preference

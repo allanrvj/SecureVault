@@ -1,5 +1,7 @@
-included:
-  - SecureVault
-  - SecureVaultTests
 excluded:
   - .build
+  - SourcePackages
+  - DerivedData
+
+trailing_comma:
+  mandatory_comma: true

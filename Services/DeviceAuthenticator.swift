@@ -26,11 +26,11 @@ struct SystemDeviceAuthenticator: DeviceAuthenticator {
         }
 
         do {
-            let ok = try await context.evaluatePolicy(
+            let succeeded = try await context.evaluatePolicy(
                 .deviceOwnerAuthentication,
                 localizedReason: reason
             )
-            return ok ? .success : .failed
+            return succeeded ? .success : .failed
         } catch let error as LAError {
             switch error.code {
             case .userCancel, .systemCancel, .appCancel:

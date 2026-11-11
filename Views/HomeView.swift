@@ -15,9 +15,9 @@ struct HomeView: View {
             VStack(spacing: 20) {
                 Text("Home")
                     .font(.title)
-                Button(action: {
+                Button {
                     Task { await viewModel.signOut() }
-                }) {
+                } label: {
                     if viewModel.isSubmitting {
                         ProgressView()
                     } else {

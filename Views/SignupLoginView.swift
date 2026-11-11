@@ -39,11 +39,11 @@ struct SignupLoginView: View {
                         .padding(.horizontal)
                 }
 
-                Button(action: {
+                Button {
                     Task {
                         await viewModel.signIn(email: email, password: password)
                     }
-                }) {
+                } label: {
                     if viewModel.isSubmitting {
                         ProgressView()
                     } else {
