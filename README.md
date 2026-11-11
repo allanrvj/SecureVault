@@ -1,5 +1,7 @@
 # SecureVault
 
+[![CI](https://github.com/allanrvj/SecureVault/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/allanrvj/SecureVault/actions/workflows/ci.yml)
+
 A SwiftUI iOS app that demonstrates a secure authentication flow: email/password sign-in against a Supabase backend, a persisted session, and an optional Face ID / Touch ID lock that the user turns on from a Settings screen.
 
 I built it as a portfolio project to show how I structure a small, testable iOS app with modern Apple frameworks, and to document the security trade-offs I made along the way.
