@@ -71,6 +71,11 @@ final class AuthViewModel {
         state = .signedOut
     }
 
+    func lock() {
+        guard state == .signedIn, preference.isEnabled() else { return }
+        state = .locked
+    }
+
     func unlock() async {
         guard state == .locked, !isAuthenticating else { return }
         isAuthenticating = true

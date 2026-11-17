@@ -17,7 +17,7 @@ I built it as a portfolio project to show how I structure a small, testable iOS 
 - Sign in with email and password (Supabase Auth)
 - Restore the session on launch, so the user doesn't type their password every time
 - Log out, including when the network is unavailable
-- Optional biometric lock: when enabled in Settings, the app asks for Face ID / Touch ID (with device passcode as fallback) on every cold launch
+- - Optional lock, turned on from Settings: when enabled, the app asks for Face ID / Touch ID (with device passcode as fallback) on cold launch, as soon as the app goes to the background, and after 1 minute without touches or typing
 - Settings screen reached from a gear button on Home, using `NavigationStack`
 
 ## Tech stack
@@ -31,6 +31,7 @@ I built it as a portfolio project to show how I structure a small, testable iOS 
 | Secure storage | Keychain Services (Security framework) |
 | Backend | Supabase Swift SDK (via Swift Package Manager) |
 | Testing | XCTest with hand-written fakes |
+| Auto-lock | Combine (`NotificationCenter` publishers, `debounce`, `Merge`) |
 
 ## Architecture
 
@@ -47,6 +48,7 @@ SecureVault/
 ├── SecureVault/                App entry point (SecureVaultApp), AppConfig, Info.plist and assets
 ├── Services/           Protocols and their real implementations
 │   ├── AuthService               protocol
+│   ├── AutoLockMonitor           re-lock on backgrounding or inactivity (Combine)
 │   ├── SupabaseAuthService       wraps SupabaseClient
 │   ├── DeviceAuthenticator       protocol (+ system implementation using LocalAuthentication)
 │   ├── KeychainStore             protocol
@@ -93,11 +95,14 @@ These are the decisions I'd want a reviewer to know about, and why I made them.
 
 **Offline sign-out clears the local session.** The SDK removes the session locally even if the request fails (verified by testing), so the user is always signed out on the device. The server-side refresh token is not revoked until it expires.
 
+**The app re-locks on backgrounding and after inactivity.** `AutoLockMonitor` merges two Combine streams: `didEnterBackground` notifications, and a debounced stream of user activity (touches and typing) that fires after 1 minute of silence. It listens for `didEnterBackground` rather than `willResignActive`, because the latter also fires for Control Center and system dialogs. The monitor only calls `AuthViewModel.lock()`, which does nothing unless the user is signed in and the lock preference is on.
+
 ### Known limitations
 
 - `hasValidSession()` uses `try?`, so it can't distinguish "no session" from "refresh failed because the device is offline". An offline user with a valid session is treated as signed out.
 - The biometric gate runs on cold launch only. Re-locking after time in the background is planned together with session expiry.
 - Turning the lock off does not require a scan.
+- The app switcher snapshot is not covered yet: iOS captures the screen when the app is backgrounded, so vault content could appear there even though the app is locked. A privacy cover is planned.
 
 ## Project status
 
@@ -108,8 +113,8 @@ These are the decisions I'd want a reviewer to know about, and why I made them.
 - [x] Face ID / Touch ID gate and lock screen
 - [x] Settings screen with the Face ID toggle
 - [x] Unit tests for the view model and the preference (using fakes)
+- [x] Re-lock after backgrounding for 5 mins
 - [ ] Sign-up flow
-- [ ] Re-lock after backgrounding for 5 mins
 
 ## Getting started
 

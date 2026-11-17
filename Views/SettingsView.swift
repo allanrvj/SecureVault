@@ -10,16 +10,26 @@ import SwiftUI
 struct SettingsView: View {
     let viewModel: AuthViewModel
 
+    private var idleDescription: String {
+        Duration.seconds(AutoLockMonitor.idleTimeout)
+            .formatted(.units(allowed: [.minutes, .seconds], width: .wide))
+    }
+
     var body: some View {
         Form {
             Section {
-                Toggle("Authenticate with Face ID", isOn: Binding(
+                Toggle("Require Face ID", isOn: Binding(
                     get: { viewModel.isBiometricLockEnabled },
                     set: { newValue in Task { await viewModel.setBiometricLock(newValue) } }
                 ))
             } footer: {
-                if let message = viewModel.settingsMessage {
-                    Text(message).foregroundStyle(.red)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("When on, SecureVault locks as soon as you leave the app and after \(idleDescription)"
+                         + " without activity. Face ID or your device passcode is needed to open it again."
+                         + " When off, anyone holding your unlocked phone can open your vault.")
+                    if let message = viewModel.settingsMessage {
+                        Text(message).foregroundStyle(.red)
+                    }
                 }
             }
             #if DEBUG

@@ -30,18 +30,27 @@ struct SecureVaultApp: App {
 
     struct RootView: View {
         let viewModel: AuthViewModel
+        @State private var autoLock: AutoLockMonitor?
 
         var body: some View {
-            switch viewModel.state {
-            case .loading:
-                ProgressView()
-                    .task { await viewModel.restoreSession() }
-            case .locked:
-                LockedView(viewModel: viewModel)
-            case .signedOut:
-                SignupLoginView(viewModel: viewModel)
-            case .signedIn:
-                HomeView(viewModel: viewModel)
+            Group {
+                switch viewModel.state {
+                case .loading:
+                    ProgressView()
+                        .task { await viewModel.restoreSession() }
+                case .locked:
+                    LockedView(viewModel: viewModel)
+                case .signedOut:
+                    SignupLoginView(viewModel: viewModel)
+                case .signedIn:
+                    HomeView(viewModel: viewModel)
+                }
+            }
+            .onAppear {
+                guard autoLock == nil else { return }
+                let monitor = AutoLockMonitor { [viewModel] in viewModel.lock() }
+                monitor.installTouchTracking()
+                autoLock = monitor
             }
         }
     }
