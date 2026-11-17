@@ -13,25 +13,25 @@ final class AuthViewModelSessionTests: XCTestCase {
     // MARK: - Initial state
 
     func test_init_startsInLoadingStateWithNoMessages() async {
-        let sut = makeHarness().sut
+        let sut = makeHarness(lockEnabled: false).sut
 
         XCTAssertEqual(sut.state, .loading)
         XCTAssertNil(sut.errorMessage)
         XCTAssertNil(sut.settingsMessage)
         XCTAssertFalse(sut.isSubmitting)
-        XCTAssertTrue(sut.isBiometricLockEnabled)
+        XCTAssertFalse(sut.isBiometricLockEnabled)
     }
 
     // MARK: - restoreSession
 
     func test_restoreSession_withoutValidSession_isSignedOut() async {
-        let harness = makeHarness()
+        let harness = makeHarness(lockEnabled: false)
         harness.service.hasSession = false
 
         await harness.sut.restoreSession()
 
         XCTAssertEqual(harness.sut.state, .signedOut)
-        XCTAssertTrue(harness.sut.isBiometricLockEnabled)
+        XCTAssertFalse(harness.sut.isBiometricLockEnabled)
     }
 
     func test_restoreSession_withValidSessionAndPreferenceNeverSet_isLocked() async {

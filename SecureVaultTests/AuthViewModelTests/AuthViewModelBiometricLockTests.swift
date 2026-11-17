@@ -33,37 +33,37 @@ final class AuthViewModelBiometricLockTests: XCTestCase {
     }
 
     func test_setBiometricLock_enable_whenCancelled_staysOffAndSavesNothing() async {
-        let harness = makeHarness()
+        let harness = makeHarness(lockEnabled: false)
         harness.authenticator.result = .cancelled
 
         await harness.sut.setBiometricLock(true)
 
-        XCTAssertTrue(harness.sut.isBiometricLockEnabled)
+        XCTAssertFalse(harness.sut.isBiometricLockEnabled)
+        XCTAssertFalse(harness.preference.isEnabled())
         XCTAssertNil(harness.sut.settingsMessage)
-        XCTAssertTrue(harness.store.storage.isEmpty)
     }
 
     func test_setBiometricLock_enable_whenAuthenticationFails_staysOffAndSavesNothing() async {
-        let harness = makeHarness()
+        let harness = makeHarness(lockEnabled: false)
         harness.authenticator.result = .failed
 
         await harness.sut.setBiometricLock(true)
 
-        XCTAssertTrue(harness.sut.isBiometricLockEnabled)
+        XCTAssertFalse(harness.sut.isBiometricLockEnabled)
+        XCTAssertFalse(harness.preference.isEnabled())
         XCTAssertNil(harness.sut.settingsMessage)
-        XCTAssertTrue(harness.store.storage.isEmpty)
     }
 
     func test_setBiometricLock_enable_whenDeviceLockUnavailable_showsSetupMessage() async {
-        let harness = makeHarness()
+        let harness = makeHarness(lockEnabled: false)
         harness.authenticator.result = .unavailable
 
         await harness.sut.setBiometricLock(true)
 
-        XCTAssertTrue(harness.sut.isBiometricLockEnabled)
+        XCTAssertFalse(harness.sut.isBiometricLockEnabled)
+        XCTAssertFalse(harness.preference.isEnabled())
         XCTAssertEqual(harness.sut.settingsMessage,
                        "Set up a device passcode or Face ID in iOS Settings first.")
-        XCTAssertTrue(harness.store.storage.isEmpty)
     }
 
     func test_setBiometricLock_enable_whenSaveFails_showsSaveErrorAndStaysOff() async {

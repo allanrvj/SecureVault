@@ -100,6 +100,25 @@ struct Harness {
 }
 
 @MainActor
+func makeHarness(lockEnabled: Bool? = nil) -> Harness {
+    let service = FakeAuthService()
+    let authenticator = FakeDeviceAuthenticator()
+    let store = InMemoryKeychainStore()
+    let preference = BiometricPreference(store: store)
+    if let lockEnabled {
+        try? preference.setEnabled(lockEnabled) // seeded before the view model reads it in init
+    }
+    let sut = AuthViewModel(service: service,
+                            authenticator: authenticator,
+                            preference: preference)
+    return Harness(sut: sut,
+                   service: service,
+                   authenticator: authenticator,
+                   store: store,
+                   preference: preference)
+}
+
+@MainActor
 func makeHarness() -> Harness {
     let service = FakeAuthService()
     let authenticator = FakeDeviceAuthenticator()
