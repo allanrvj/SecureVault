@@ -26,6 +26,7 @@
       }
     },
     {
+      "enabled" : false,
       "target" : {
         "containerPath" : "container:SecureVault.xcodeproj",
         "identifier" : "3E18D5F4307DBD69009BC34F",
