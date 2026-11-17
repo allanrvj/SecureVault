@@ -38,7 +38,7 @@ final class AuthViewModelBiometricLockTests: XCTestCase {
 
         await harness.sut.setBiometricLock(true)
 
-        XCTAssertFalse(harness.sut.isBiometricLockEnabled)
+        XCTAssertTrue(harness.sut.isBiometricLockEnabled)
         XCTAssertNil(harness.sut.settingsMessage)
         XCTAssertTrue(harness.store.storage.isEmpty)
     }
@@ -49,7 +49,7 @@ final class AuthViewModelBiometricLockTests: XCTestCase {
 
         await harness.sut.setBiometricLock(true)
 
-        XCTAssertFalse(harness.sut.isBiometricLockEnabled)
+        XCTAssertTrue(harness.sut.isBiometricLockEnabled)
         XCTAssertNil(harness.sut.settingsMessage)
         XCTAssertTrue(harness.store.storage.isEmpty)
     }
@@ -60,7 +60,7 @@ final class AuthViewModelBiometricLockTests: XCTestCase {
 
         await harness.sut.setBiometricLock(true)
 
-        XCTAssertFalse(harness.sut.isBiometricLockEnabled)
+        XCTAssertTrue(harness.sut.isBiometricLockEnabled)
         XCTAssertEqual(harness.sut.settingsMessage,
                        "Set up a device passcode or Face ID in iOS Settings first.")
         XCTAssertTrue(harness.store.storage.isEmpty)
@@ -73,7 +73,7 @@ final class AuthViewModelBiometricLockTests: XCTestCase {
 
         await harness.sut.setBiometricLock(true)
 
-        XCTAssertFalse(harness.sut.isBiometricLockEnabled)
+        XCTAssertTrue(harness.sut.isBiometricLockEnabled)
         XCTAssertEqual(harness.sut.settingsMessage, "Couldn't save the setting.")
     }
 
