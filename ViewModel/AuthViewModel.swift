@@ -33,6 +33,7 @@ final class AuthViewModel {
         self.service = service
         self.authenticator = authenticator
         self.preference = preference
+        isBiometricLockEnabled = preference.isEnabled()
     }
 
     func restoreSession() async {

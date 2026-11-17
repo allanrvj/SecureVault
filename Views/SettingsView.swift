@@ -25,8 +25,8 @@ struct SettingsView: View {
             } footer: {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("When on, SecureVault locks as soon as you leave the app and after \(idleDescription)"
-                         + " without activity. Face ID or your device passcode is needed to open it again."
-                         + " When off, anyone holding your unlocked phone can open your vault.")
+                        + " without activity. Face ID or your device passcode is needed to open it again."
+                        + " When off, anyone holding your unlocked phone can open your vault.")
                     if let message = viewModel.settingsMessage {
                         Text(message).foregroundStyle(.red)
                     }

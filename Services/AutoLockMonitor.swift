@@ -13,7 +13,6 @@ import UIKit
 /// been idle (no touches, no typing) for `idleTimeout` seconds.
 @MainActor
 final class AutoLockMonitor {
-
     static let idleTimeout: TimeInterval = 60
 
     private let touches = PassthroughSubject<Void, Never>()
@@ -83,13 +82,15 @@ private final class TouchRecognizer: UIGestureRecognizer, UIGestureRecognizerDel
         delegate = self
     }
 
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
+    override func touchesBegan(_: Set<UITouch>, with _: UIEvent) {
         onTouch()
         state = .failed // step aside so we never block other recognizers
     }
 
     func gestureRecognizer(
-        _ gestureRecognizer: UIGestureRecognizer,
-        shouldRecognizeSimultaneouslyWith other: UIGestureRecognizer
-    ) -> Bool { true }
+        _: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith _: UIGestureRecognizer
+    ) -> Bool {
+        true
+    }
 }
