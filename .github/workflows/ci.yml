@@ -16,7 +16,7 @@ env:
   SCHEME: SecureVault
   PROJECT: SecureVault.xcodeproj
   XCODE_VERSION: "26.3"
-  DESTINATION: "platform=iOS Simulator,name=iPhone 17 Pro"
+  # DESTINATION is set by the "Pick an iPhone simulator" step below.
 
 jobs:
   lint:
@@ -52,6 +52,45 @@ jobs:
             ls /Applications | grep -i xcode || true
           fi
           xcodebuild -version
+
+      # Shows what this particular runner actually has. Useful when a runner image changes.
+      - name: Show available simulators
+        run: |
+          xcrun simctl list runtimes
+          xcrun simctl list devices available
+
+      # Prefers iPhone 17 Pro, falls back to any iPhone simulator. If the runner has
+      # no iOS simulator runtime at all, downloads it once and tries again.
+      - name: Pick an iPhone simulator
+        run: |
+          UUID_REGEX='[0-9A-F]{8}(-[0-9A-F]{4}){3}-[0-9A-F]{12}'
+
+          pick_udid() {
+            local devices
+            devices=$(xcrun simctl list devices available iPhone || true)
+            UDID=$(echo "$devices" | grep -E 'iPhone 17 Pro \(' | grep -Eo "$UUID_REGEX" | head -n 1 || true)
+            if [ -z "$UDID" ]; then
+              UDID=$(echo "$devices" | grep -Eo "$UUID_REGEX" | head -n 1 || true)
+            fi
+          }
+
+          pick_udid
+
+          if [ -z "$UDID" ]; then
+            echo "::warning::No iPhone simulator found; downloading the iOS platform"
+            xcodebuild -downloadPlatform iOS
+            pick_udid
+          fi
+
+          if [ -z "$UDID" ]; then
+            echo "::error::No iPhone simulator available on this runner"
+            xcrun simctl list runtimes
+            xcrun simctl list devices available
+            exit 1
+          fi
+
+          echo "Using simulator $UDID"
+          echo "DESTINATION=platform=iOS Simulator,id=$UDID" >> "$GITHUB_ENV"
 
       # The real Secrets.xcconfig is gitignored; CI builds with the placeholder values.
       - name: Create Secrets.xcconfig from example
@@ -101,6 +140,9 @@ jobs:
             -destination "$DESTINATION" \
             -clonedSourcePackagesDirPath SourcePackages \
             -resultBundlePath TestResults.xcresult \
+            -test-timeouts-enabled YES \
+            -default-test-execution-time-allowance 120 \
+            -maximum-test-execution-time-allowance 300 \
             CODE_SIGNING_ALLOWED=NO
 
       - name: Upload test results
