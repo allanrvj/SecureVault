@@ -48,7 +48,7 @@ struct SecureVaultApp: App {
             }
             .onAppear {
                 guard autoLock == nil else { return }
-                let monitor = AutoLockMonitor { [viewModel] in viewModel.lock() }
+                let monitor = AutoLockMonitor { viewModel.lock() }
                 monitor.installTouchTracking()
                 autoLock = monitor
             }
