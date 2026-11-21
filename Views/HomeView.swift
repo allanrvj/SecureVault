@@ -12,23 +12,27 @@ struct HomeView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 20) {
-                Text("Home")
-                    .font(.title)
-                Button {
-                    Task { await viewModel.signOut() }
-                } label: {
-                    if viewModel.isSubmitting {
-                        ProgressView()
-                    } else {
-                        Text("Log out")
+            List {
+                Section("Your vault") {
+                    ForEach(VaultItem.samples) { item in
+                        Label(item.title, systemImage: item.symbol)
                     }
                 }
-                .primaryButtonStyle()
-                .disabled(viewModel.isSubmitting)
+
+                Section {
+                    Button(role: .destructive) {
+                        Task { await viewModel.signOut() }
+                    } label: {
+                        if viewModel.isSubmitting {
+                            ProgressView()
+                        } else {
+                            Text("Log out")
+                        }
+                    }
+                    .disabled(viewModel.isSubmitting)
+                }
             }
-            .navigationTitle("Home")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("Vault")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
@@ -40,6 +44,19 @@ struct HomeView: View {
             }
         }
     }
+}
+
+/// Placeholder data until real vault storage exists
+struct VaultItem: Identifiable {
+    let id = UUID()
+    let title: String
+    let symbol: String
+
+    static let samples = [
+        VaultItem(title: "Passwords", symbol: "key.fill"),
+        VaultItem(title: "Documents", symbol: "doc.fill"),
+        VaultItem(title: "Secure notes", symbol: "note.text"),
+    ]
 }
 
 #if DEBUG

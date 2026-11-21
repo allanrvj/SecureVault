@@ -10,53 +10,81 @@ import SwiftUI
 struct SignupLoginView: View {
     @State private var email = ""
     @State private var password = ""
+    @FocusState private var focusedField: Field?
 
     let viewModel: AuthViewModel
 
+    private enum Field { case email, password }
+
     var body: some View {
-        ZStack {
-            Color(.systemBackground)
-            VStack {
-                Text("SecureVault").font(.title2).foregroundStyle(Color.accentColor).padding().bold()
+        ScrollView {
+            VStack(spacing: 32) {
+                header
 
-                Spacer()
-
-                Text("Welcome back").font(.title).padding(50)
-
-                BorderedField {
-                    TextField("Email", text: $email)
-                }
-
-                BorderedField {
-                    SecureField("Password", text: $password)
-                }
-
-                if let errorMessage = viewModel.errorMessage {
-                    Text(errorMessage)
-                        .font(.footnote)
-                        .foregroundStyle(.red)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                }
-
-                Button {
-                    Task {
-                        await viewModel.signIn(email: email, password: password)
+                VStack(spacing: 16) {
+                    BorderedField {
+                        TextField("Email", text: $email)
+                            .textContentType(.emailAddress)
+                            .keyboardType(.emailAddress)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                            .focused($focusedField, equals: .email)
+                            .submitLabel(.next)
+                            .onSubmit { focusedField = .password }
                     }
-                } label: {
+
+                    BorderedField {
+                        SecureField("Password", text: $password)
+                            .textContentType(.password)
+                            .focused($focusedField, equals: .password)
+                            .submitLabel(.go)
+                            .onSubmit {
+                                if canSubmit {
+                                    submit()
+                                }
+                            }
+                    }
+
+                    if let errorMessage = viewModel.errorMessage {
+                        Text(errorMessage)
+                            .font(.footnote)
+                            .foregroundStyle(.red)
+                            .multilineTextAlignment(.center)
+                    }
+                }
+
+                Button(action: submit) {
                     if viewModel.isSubmitting {
                         ProgressView()
                     } else {
-                        Text("Login to system")
+                        Text("Log in")
                     }
                 }
                 .primaryButtonStyle()
-                .padding()
                 .disabled(!canSubmit)
-
-                Spacer()
             }
+            .padding(.horizontal, 24)
+            .padding(.top, 72)
         }
+        .scrollDismissesKeyboard(.interactively)
+        .onTapGesture { focusedField = nil }
+        .background(Color(.systemGroupedBackground))
+    }
+
+    private var header: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "lock.shield.fill")
+                .font(.system(size: 56))
+                .foregroundStyle(.tint)
+            Text("SecureVault")
+                .font(.largeTitle.bold())
+            Text("Sign in to open your vault")
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private func submit() {
+        Task { await viewModel.signIn(email: email, password: password) }
     }
 
     private var canSubmit: Bool {
